@@ -22,6 +22,7 @@ var (
 	features      []model.Feature
 	featuresNames map[string]struct{}
 	scoresMatrix  *mx.Sparse
+	stats         *model.Stats
 	usersVector   []model.User
 
 	errCacheNotLoaded = errors.New("cache not loaded")
@@ -29,6 +30,10 @@ var (
 
 // LoadCache loads all cacheable data into memory.
 func LoadCache(db *sql.DB) error {
+	if err := loadStats(db); err != nil {
+		return err
+	}
+
 	if err := loadFeatures(db); err != nil {
 		return err
 	}
@@ -42,6 +47,14 @@ func LoadCache(db *sql.DB) error {
 	}
 
 	return nil
+}
+
+// GetStats provides database statistics.
+func GetStats() model.Stats {
+	if stats == nil {
+		panic(errCacheNotLoaded)
+	}
+	return *stats
 }
 
 // GetFeatures returns a slice containing all features.

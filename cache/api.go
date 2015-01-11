@@ -6,7 +6,54 @@ package cache
 
 import (
 	"database/sql"
+
+	"github.com/DevMine/api-server/model"
 )
+
+// loadStats loads some database related statistics.
+func loadStats(db *sql.DB) error {
+	var err error
+	var s model.Stats
+
+	err = db.QueryRow(`SELECT COUNT(users.id) FROM users`).Scan(&s.UsersCount)
+	if err != nil {
+		return err
+	}
+
+	err = db.QueryRow(`SELECT COUNT(repositories.id) FROM repositories`).Scan(
+		&s.RepositoriesCount)
+	if err != nil {
+		return err
+	}
+
+	err = db.QueryRow(`SELECT COUNT(features.id) FROM features`).Scan(
+		&s.FeaturesCount)
+	if err != nil {
+		return err
+	}
+
+	err = db.QueryRow(`SELECT COUNT(gh_users.id) FROM gh_users`).Scan(
+		&s.GhUsersCount)
+	if err != nil {
+		return err
+	}
+
+	err = db.QueryRow(`SELECT COUNT(gh_organizations.id) FROM gh_organizations`).Scan(
+		&s.GhOrganizationsCount)
+	if err != nil {
+		return err
+	}
+
+	err = db.QueryRow(`SELECT COUNT(gh_repositories.id) FROM gh_repositories`).Scan(
+		&s.GhRepositoriesCount)
+	if err != nil {
+		return err
+	}
+
+	stats = &s
+
+	return nil
+}
 
 // loadFeaturesNames loads the map of features names.
 func loadFeaturesNames(db *sql.DB) error {
