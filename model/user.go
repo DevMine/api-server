@@ -10,5 +10,5 @@ type User struct {
 	Username *string `json:"username"`
 	Name     *string `json:"name"`
 	Email    *string `json:"email"`
-	GhUser   *GhUser `json:"gh_user"`
+	GhUser   *GhUser `json:"gh_user,omitempty"`
 }

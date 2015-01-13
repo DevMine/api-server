@@ -27,5 +27,5 @@ type GhUser struct {
 	CollaboratorsCount *int64            `json:"collaborators_count"`
 	CreatedAt          *time.Time        `json:"created_at"`
 	UpdatedAt          *time.Time        `json:"updated_at"`
-	GhOrganizations    []*GhOrganization `json:"gh_organizations"`
+	GhOrganizations    []*GhOrganization `json:"gh_organizations,omitempty"`
 }

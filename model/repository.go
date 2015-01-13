@@ -12,5 +12,5 @@ type Repository struct {
 	CloneURL        *string       `json:"clone_url"`
 	ClonePath       *string       `json:"clone_path"`
 	VCS             *string       `json:"vcs"`
-	GhRepository    *GhRepository `json:"gh_repository"`
+	GhRepository    *GhRepository `json:"gh_repository,omitempty"`
 }
