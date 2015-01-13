@@ -26,6 +26,12 @@ func loadStats(db *sql.DB) error {
 		return err
 	}
 
+	err = db.QueryRow(`SELECT COUNT(commits.id) FROM commits`).Scan(
+		&s.CommitsCount)
+	if err != nil {
+		return err
+	}
+
 	err = db.QueryRow(`SELECT COUNT(features.id) FROM features`).Scan(
 		&s.FeaturesCount)
 	if err != nil {
