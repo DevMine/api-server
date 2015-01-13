@@ -167,6 +167,81 @@ GET /users/Rolinh
 }
 ```
 
+#### Get commits of a user
+
+You can get all the commits of a user by querying the `/users/:username/commits`
+route. As there is potentially a lot of commits, results are paginated.
+
+```
+GET /users/Rolinh/commits
+```
+
+***Response***
+
+```
+[
+  {
+    "id": 1375918,
+    "repository": {
+      "id": 93271,
+      "name": "crawld",
+      "primary_language": "Go",
+      "clone_url": "https://github.com/DevMine/crawld.git",
+      "clone_path": "go/devmine/crawld",
+      "vcs": "git"
+    },
+    "message": "main: Rename '-disable-fetchers' to 'disable-fetcher' option.\n\nWe actually have only on fetcher and, potentially, several crawlers.\nAlong with the option renaming, update option description to be a little\nmore informative.\n",
+    "author": {
+      "id": 46138,
+      "username": "Rolinh",
+      "name": "Robin Hahling",
+      "email": "robin.hahling@gw-computing.net"
+    },
+    "committer": {
+      "id": 46138,
+      "username": "Rolinh",
+      "name": "Robin Hahling",
+      "email": "robin.hahling@gw-computing.net"
+    },
+    "author_date": "2015-01-08T19:13:09+01:00",
+    "commit_date": "2015-01-08T19:13:09+01:00",
+    "file_changed_count": 1,
+    "insertions_count": 3,
+    "deletions_count": 3
+  },
+  {
+    "id": 1375919,
+    "repository": {
+      "id": 93271,
+      "name": "crawld",
+      "primary_language": "Go",
+      "clone_url": "https://github.com/DevMine/crawld.git",
+      "clone_path": "go/devmine/crawld",
+      "vcs": "git"
+    },
+    "message": "crawld: Make sure we finish writing logs before exiting.\n\nLog output is buffered and written periodically using flush (around\nevery 10 seconds).\n",
+    "author": {
+      "id": 46138,
+      "username": "Rolinh",
+      "name": "Robin Hahling",
+      "email": "robin.hahling@gw-computing.net"
+    },
+    "committer": {
+      "id": 46138,
+      "username": "Rolinh",
+      "name": "Robin Hahling",
+      "email": "robin.hahling@gw-computing.net"
+    },
+    "author_date": "2015-01-08T00:31:22+01:00",
+    "commit_date": "2015-01-08T00:31:22+01:00",
+    "file_changed_count": 1,
+    "insertions_count": 3,
+    "deletions_count": 0
+  },
+...
+]
+```
+
 #### Get repositories associated to a user
 
 You can get the repositories associated to a user by querying the
