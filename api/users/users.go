@@ -110,6 +110,55 @@ func Show(c *context.Context, w http.ResponseWriter, r *http.Request) {
 	w.Write(json.MarshalIndentPanic(u))
 }
 
+// ShowCommits handles "/users/{username:[a-zA-Z0-9\\-_\\.]+}/commits" route.
+func ShowCommits(c *context.Context, w http.ResponseWriter, r *http.Request) {
+	vars := mux.Vars(r)
+	username := vars["username"]
+
+	rows, err := c.DB.Query(`
+        SELECT
+            c.id, c.repository_id, c.author_id, c.committer_id,
+            c.message, c.author_date, c.commit_date,
+            c.file_changed_count, c.insertions_count, c.deletions_count
+        FROM commits AS c
+        INNER JOIN users AS u
+        ON u.id=c.author_id
+        WHERE c.id >= $1
+        AND LOWER(u.username) = LOWER($2)
+        ORDER BY c.id ASC
+        LIMIT $3`,
+		c.SinceID,
+		username,
+		c.PerPage)
+	if err != nil {
+		panic(err)
+	}
+	defer rows.Close()
+
+	commits := make([]model.Commit, 0)
+
+	for rows.Next() {
+		var co model.Commit
+		var authorID, committerID, repoID *int64
+
+		if err := rows.Scan(
+			&co.ID, &repoID, &authorID, &committerID,
+			&co.Message, &co.AuthorDate, &co.CommitDate,
+			&co.FileChangedCount, &co.InsertionsCount, &co.DeletionsCount); err != nil {
+			glog.Error(err)
+			continue
+		}
+
+		co.Author = fetchUser(c.DB, authorID)
+		co.Committer = fetchUser(c.DB, committerID)
+		co.Repository = fetchRepository(c.DB, repoID)
+
+		commits = append(commits, co)
+	}
+
+	w.Write(json.MarshalPanic(commits))
+}
+
 // ShowRepositories handles "/users/{username:[a-zA-Z0-9\\-_\\.]+}/repositories"
 // route.
 func ShowRepositories(c *context.Context, w http.ResponseWriter, r *http.Request) {
@@ -294,4 +343,42 @@ func createGhOrgsFromPGArray(pgArray string) []*model.GhOrganization {
 	}
 
 	return ghOrgs
+}
+
+// fetchUser retrieves a user from the database.
+func fetchUser(db *sql.DB, id *int64) *model.User {
+	if id == nil || db == nil {
+		return nil
+	}
+
+	var u model.User
+	err := db.QueryRow(`
+        SELECT id, username, name, email
+        FROM users
+        WHERE id=$1`,
+		*id).Scan(&u.ID, &u.Username, &u.Name, &u.Email)
+	if err != nil {
+		panic(err)
+	}
+
+	return &u
+}
+
+// fetchRepository retrieves a repository from the database.
+func fetchRepository(db *sql.DB, id *int64) *model.Repository {
+	if id == nil || db == nil {
+		return nil
+	}
+
+	var r model.Repository
+	err := db.QueryRow(`
+        SELECT id, name, primary_language, clone_url, clone_path, vcs
+        FROM repositories
+        WHERE id=$1`,
+		*id).Scan(&r.ID, &r.Name, &r.PrimaryLanguage, &r.CloneURL, &r.ClonePath, &r.VCS)
+	if err != nil {
+		panic(err)
+	}
+
+	return &r
 }

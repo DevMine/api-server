@@ -106,6 +106,8 @@ func SetupRouter(db *sql.DB) *mux.Router {
 		makeHandler(db, users.Index)).Methods("GET")
 	r.HandleFunc("/users/{username:[a-zA-Z0-9-_\\.]+}",
 		makeHandler(db, users.Show)).Methods("GET")
+	r.HandleFunc("/users/{username:[a-zA-Z0-9-_\\.]+}/commits",
+		makeHandler(db, users.ShowCommits)).Methods("GET")
 	r.HandleFunc("/users/{username:[a-zA-Z0-9-_\\.]+}/repositories",
 		makeHandler(db, users.ShowRepositories)).Methods("GET")
 	r.HandleFunc("/users/{username:[a-zA-Z0-9-_\\.]+}/scores",
