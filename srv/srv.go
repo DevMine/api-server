@@ -48,6 +48,9 @@ func makeHandler(db *sql.DB, h handler) http.HandlerFunc {
 		// we only serve JSON
 		w.Header().Set("Content-Type", "application/json")
 
+		// the server only accepts GET requests
+		w.Header().Set("Access-Control-Allow-Methods", "GET")
+
 		requestURI, err := url.QueryUnescape(r.RequestURI)
 		if err != nil {
 			requestURI = r.RequestURI
