@@ -55,7 +55,7 @@ func main() {
 	toc := time.Now()
 	glog.Info("done in ", toc.Sub(tic))
 
-	router := srv.SetupRouter(db)
+	router := srv.SetupRouter(db, cfg.Server.EnableCors)
 	addr := fmt.Sprintf("%s:%d", cfg.Server.HostName, cfg.Server.Port)
 	glog.Infof("listening on %s...\n", addr)
 	err = http.ListenAndServe(addr, router)

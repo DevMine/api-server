@@ -29,7 +29,7 @@ import (
 type handler func(c *context.Context, w http.ResponseWriter, r *http.Request)
 
 // makeHandler creates the handler function prototype
-func makeHandler(db *sql.DB, h handler) http.HandlerFunc {
+func makeHandler(db *sql.DB, h handler, cors bool) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		defer func() {
 			if err := recover(); err != nil {
@@ -50,6 +50,14 @@ func makeHandler(db *sql.DB, h handler) http.HandlerFunc {
 
 		// the server only accepts GET requests
 		w.Header().Set("Access-Control-Allow-Methods", "GET")
+
+		// enable Cross Origin Resource Sharing
+		if cors {
+			glog.Info("enable cors")
+			w.Header().Set("Access-Control-Allow-Origin", "*")
+			w.Header().Set("Access-Control-Allow-Headers",
+				"Origin, Accept, Content-Type, X-Requested-With, X-CSRF-Token")
+		}
 
 		requestURI, err := url.QueryUnescape(r.RequestURI)
 		if err != nil {
@@ -72,7 +80,9 @@ func notFoundHandler() http.Handler {
 }
 
 // SetupRouter creates API routes.
-func SetupRouter(db *sql.DB) *mux.Router {
+// The cors parameter is used to specify whether to enable
+// Cross Origin Resource Sharing or not.
+func SetupRouter(db *sql.DB, cors bool) *mux.Router {
 	r := mux.NewRouter()
 
 	// 404 Not Found routes
@@ -80,41 +90,41 @@ func SetupRouter(db *sql.DB) *mux.Router {
 
 	// default route
 	r.HandleFunc("/",
-		makeHandler(db, api.Index)).Methods("GET")
+		makeHandler(db, api.Index, cors)).Methods("GET")
 
 	// features
 	r.HandleFunc("/features",
-		makeHandler(db, features.Index)).Methods("GET")
+		makeHandler(db, features.Index, cors)).Methods("GET")
 	r.HandleFunc("/features/by_category/{category:[a-zA-Z]+}",
-		makeHandler(db, features.ByCategory)).Methods("GET")
+		makeHandler(db, features.ByCategory, cors)).Methods("GET")
 	r.HandleFunc("/features/{name:[a-zA-Z0-9_]+}/scores",
-		makeHandler(db, features.ShowScores)).Methods("GET")
+		makeHandler(db, features.ShowScores, cors)).Methods("GET")
 
 	// repositories
 	r.HandleFunc("/repositories",
-		makeHandler(db, repos.Index)).Methods("GET")
+		makeHandler(db, repos.Index, cors)).Methods("GET")
 	r.HandleFunc("/repositories/{name:[a-zA-Z0-9\\-_\\.]+}",
-		makeHandler(db, repos.Show)).Methods("GET")
+		makeHandler(db, repos.Show, cors)).Methods("GET")
 
 	// search
 	r.HandleFunc("/search/{query}",
-		makeHandler(db, search.Query)).Methods("GET")
+		makeHandler(db, search.Query, cors)).Methods("GET")
 
 	// stats
 	r.HandleFunc("/stats",
-		makeHandler(db, stats.Index)).Methods("GET")
+		makeHandler(db, stats.Index, cors)).Methods("GET")
 
 	// users
 	r.HandleFunc("/users",
-		makeHandler(db, users.Index)).Methods("GET")
+		makeHandler(db, users.Index, cors)).Methods("GET")
 	r.HandleFunc("/users/{username:[a-zA-Z0-9-_\\.]+}",
-		makeHandler(db, users.Show)).Methods("GET")
+		makeHandler(db, users.Show, cors)).Methods("GET")
 	r.HandleFunc("/users/{username:[a-zA-Z0-9-_\\.]+}/commits",
-		makeHandler(db, users.ShowCommits)).Methods("GET")
+		makeHandler(db, users.ShowCommits, cors)).Methods("GET")
 	r.HandleFunc("/users/{username:[a-zA-Z0-9-_\\.]+}/repositories",
-		makeHandler(db, users.ShowRepositories)).Methods("GET")
+		makeHandler(db, users.ShowRepositories, cors)).Methods("GET")
 	r.HandleFunc("/users/{username:[a-zA-Z0-9-_\\.]+}/scores",
-		makeHandler(db, users.ShowScores)).Methods("GET")
+		makeHandler(db, users.ShowScores, cors)).Methods("GET")
 
 	return r
 }

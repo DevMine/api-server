@@ -594,6 +594,8 @@ needs. The configuration file has two sections:
 * **server**: allows you to configure the server parameters.
   - **hostname**: server hostname.
   - **port**: port on which to listen.
+  - **enable\_cors**: boolean indicating whether to allow Cross Origin Resource
+    Sharing (CORS) or not.
 
 Once the configuration file has been adjusted, you are ready to run the API
 server (`devmine`).

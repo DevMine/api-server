@@ -44,8 +44,9 @@ type DatabaseConfig struct {
 // ServerConfig is a configuration for the server on which api-server
 // is going to run on.
 type ServerConfig struct {
-	HostName string `json:"hostname"`
-	Port     int    `json:"port"`
+	HostName   string `json:"hostname"`
+	Port       int    `json:"port"`
+	EnableCors bool   `json:"enable_cors"`
 }
 
 // ReadConfig reads a JSON formatted configuration file, verifies the values
