@@ -53,7 +53,6 @@ func makeHandler(db *sql.DB, h handler, cors bool) http.HandlerFunc {
 
 		// enable Cross Origin Resource Sharing
 		if cors {
-			glog.Info("enable cors")
 			w.Header().Set("Access-Control-Allow-Origin", "*")
 			w.Header().Set("Access-Control-Allow-Headers",
 				"Origin, Accept, Content-Type, X-Requested-With, X-CSRF-Token")
