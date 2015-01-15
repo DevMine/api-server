@@ -51,7 +51,10 @@ func main() {
 
 	glog.Info("caching data...")
 	tic := time.Now()
-	cache.LoadCache(db)
+	err = cache.LoadCache(db)
+	if err != nil {
+		fatal(err)
+	}
 	toc := time.Now()
 	glog.Info("done in ", toc.Sub(tic))
 
