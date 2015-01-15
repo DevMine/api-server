@@ -9,6 +9,7 @@ type Stats struct {
 	UsersCount           *int64 `json:"users_count"`
 	RepositoriesCount    *int64 `json:"repositories_count"`
 	CommitsCount         *int64 `json:"commits_count"`
+	CommitDeltasCount    *int64 `json:"commit_deltas_count"`
 	FeaturesCount        *int64 `json:"features_count"`
 	GhUsersCount         *int64 `json:"gh_users_count"`
 	GhOrganizationsCount *int64 `json:"gh_organizations_count"`

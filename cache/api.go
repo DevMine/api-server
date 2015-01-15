@@ -32,6 +32,12 @@ func loadStats(db *sql.DB) error {
 		return err
 	}
 
+	err = db.QueryRow(`SELECT COUNT(commit_diff_deltas.id) FROM commit_diff_deltas`).Scan(
+		&s.CommitDeltasCount)
+	if err != nil {
+		return err
+	}
+
 	err = db.QueryRow(`SELECT COUNT(features.id) FROM features`).Scan(
 		&s.FeaturesCount)
 	if err != nil {
