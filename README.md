@@ -12,7 +12,8 @@
 
 It serves data collected and processed by various DevMine projects
 ([crawld](http://devmine.ch/doc/crawld/),
-[features](http://devmine.ch/doc/features/), ...).
+[featscomp](http://devmine.ch/doc/featscomp/),
+[repotool](http://devmine.ch/doc/repotool/)...).
 
 ## API Documentation
 
@@ -106,7 +107,7 @@ Users related resources are served under the `/users` routes.
 #### Get all users
 
 The `/users` route provides a dump of all the users, sorted by user IDs.
-As the number of is results limited, you can specify from which user ID you
+As the number of results is limited, you can specify from which user ID you
 would like to list the users with the `?since` parameter.
 
 ```
@@ -181,35 +182,6 @@ GET /users/Rolinh/commits
 ```
 [
   {
-    "id": 1375918,
-    "repository": {
-      "id": 93271,
-      "name": "crawld",
-      "primary_language": "Go",
-      "clone_url": "https://github.com/DevMine/crawld.git",
-      "clone_path": "go/devmine/crawld",
-      "vcs": "git"
-    },
-    "message": "main: Rename '-disable-fetchers' to 'disable-fetcher' option.\n\nWe actually have only on fetcher and, potentially, several crawlers.\nAlong with the option renaming, update option description to be a little\nmore informative.\n",
-    "author": {
-      "id": 46138,
-      "username": "Rolinh",
-      "name": "Robin Hahling",
-      "email": "robin.hahling@gw-computing.net"
-    },
-    "committer": {
-      "id": 46138,
-      "username": "Rolinh",
-      "name": "Robin Hahling",
-      "email": "robin.hahling@gw-computing.net"
-    },
-    "author_date": "2015-01-08T19:13:09+01:00",
-    "commit_date": "2015-01-08T19:13:09+01:00",
-    "file_changed_count": 1,
-    "insertions_count": 3,
-    "deletions_count": 3
-  },
-  {
     "id": 1375919,
     "repository": {
       "id": 93271,
@@ -282,7 +254,8 @@ GET /users/Rolinh/repositories
     "updated_at": "2015-01-09T18:37:41+01:00",
     "pushed_at": "2015-01-09T16:57:28+01:00"
   }
-}
+},
+...
 ]
 ```
 
@@ -363,7 +336,8 @@ GET /repositories/crawld
     "updated_at": "2015-01-09T18:37:41+01:00",
     "pushed_at": "2015-01-09T16:57:28+01:00"
   }
-}
+},
+...
 ]
 ```
 
@@ -407,24 +381,7 @@ GET /features/by_category/other
   "category": "other",
   "default_weight": 1
 },
-{
-  "id": 15,
-  "name": "stars_avg",
-  "category": "other",
-  "default_weight": 1
-},
-{
-  "id": 16,
-  "name": "contributions_count",
-  "category": "other",
-  "default_weight": 1
-},
-{
-  "id": 17,
-  "name": "forks_avg",
-  "category": "other",
-  "default_weight": 1
-}
+...
 ]
 ```
 
@@ -454,16 +411,7 @@ GET /followers_count/scores
   "username": "javierprovecho",
   "score": 0.00056705415367168
 },
-{
-  "id": 236,
-  "username": "andlabs",
-  "score": 0.00306209242982705
-},
-{
-  "id": 237,
-  "username": "6a68",
-  "score": 0.0022682166146867
-}
+...
 ]
 ```
 
@@ -476,7 +424,7 @@ Search queries can be done under the `/search/:query` route.
 Example query:
 
 ```
-GET /search/{"followers_count":1}
+GET /search/{"followers_count":4}
 ```
 
 The results is a list of users with their ranks, sorted from higher ranked to
@@ -487,46 +435,27 @@ The search results is limited to the top 1000 ranked users.
 
 ```
 [
-{
-  "id": 14819,
-  "username": "davebalmer",
-  "name": "Dave Balmer",
-  "email": "",
-  "gh_user": null,
-  "rank": 3.0136591317198063
-},
-{
-  "id": 14818,
-  "username": "cjihrig",
-  "name": "Colin Ihrig",
-  "email": "cjihrig@gmail.com",
-  "gh_user": null,
-  "rank": 3.0083855280906597
-},
-{
-  "id": 14826,
-  "username": "isaacs",
-  "name": "isaacs",
-  "email": "i@izs.me",
-  "gh_user": null,
-  "rank": 2.223639284824428
-},
-{
-  "id": 2290,
-  "username": "defunkt",
-  "name": "Chris Wanstrath",
-  "email": "chris@github.com",
-  "gh_user": null,
-  "rank": 2.145283513738025
-},
-{
-  "id": 1,
-  "username": "bfirsh",
-  "name": "Ben Firshman",
-  "email": "b@fir.sh",
-  "gh_user": null,
-  "rank": 2.1016145815961327
-},
+  {
+    "id": 2290,
+    "username": "defunkt",
+    "name": "Chris Wanstrath",
+    "email": "chris@github.com",
+    "rank": 4.292859984017694
+  },
+  {
+    "id": 2374,
+    "username": "mojombo",
+    "name": "Tom Preston-Werner",
+    "email": null,
+    "rank": 4.095068589338459
+  },
+  {
+    "id": 22682,
+    "username": "paulirish",
+    "name": "Paul Irish",
+    "email": "",
+    "rank": 3.211172019935161
+  },
 ...
 ]
 ```
@@ -544,12 +473,14 @@ GET /stats
 
 ```
 {
-  "users_count": 38752,
-  "repositories_count": 76919,
-  "features_count": 5,
-  "gh_users_count": 38752,
-  "gh_organizations_count": 2490,
-  "gh_repositories_count": 76917
+  "users_count": 59171,
+  "repositories_count": 121898,
+  "commits_count": 10331903,
+  "commit_deltas_count": 94117385,
+  "features_count": 6,
+  "gh_users_count": 59170,
+  "gh_organizations_count": 3985,
+  "gh_repositories_count": 121896
 }
 ```
 
