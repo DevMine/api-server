@@ -3,9 +3,6 @@
 [![Build Status](https://travis-ci.org/DevMine/api-server.png?branch=master)](https://travis-ci.org/DevMine/api-server)
 [![GoDoc](http://godoc.org/github.com/DevMine/api-server?status.svg)](http://godoc.org/github.com/DevMine/api-server)
 [![GoWalker](http://img.shields.io/badge/doc-gowalker-blue.svg?style=flat)](https://gowalker.org/github.com/DevMine/api-server)
-[![Gobuild Download](http://gobuild.io/badge/github.com/DevMine/api-server/downloads.svg)](http://gobuild.io/github.com/DevMine/api-server)
-
-
 
 `api-server` is a JSON RESTful API server implemented in
 [Go](http://golang.org/).
